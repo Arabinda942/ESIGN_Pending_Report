@@ -1286,9 +1286,15 @@ def download(rid):
     )
 
 
-    # if __name__ == "__main__":
+if __name__ == "__main__":
     # use_reloader=False avoids a crash on some Windows / Python 3.14 setups
     # where Flask's auto-reloader tries to register a signal handler outside
     # the main thread ("signal only works in main thread of the main
     # interpreter"). debug=True still gives you in-browser tracebacks.
-    # app.run(debug=True, use_reloader=False, host="0.0.0.0", port=5000)
+    #
+    # PORT: Render assigns this dynamically via an environment variable and
+    # only forwards traffic to that port. Hardcoding port=5000 is why the
+    # deployed app was 502ing — locally it falls back to 5000 as before.
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, use_reloader=False, host="0.0.0.0", port=port)
